@@ -1,0 +1,9 @@
+checkpoint_path: outputs/checkpoints/latest.pt
+val_tokens: data/processed/val_tokens.bin
+batch_size: 32
+metrics: ["loss", "perplexity"]
+generation:
+  prompt: "Once upon a time"
+  max_new_tokens: 80
+  temperature: 0.9
+  top_k: 40

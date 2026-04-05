@@ -1,0 +1,20 @@
+seed: 42
+raw_corpus_path: data/raw/corpus.txt
+processed_dir: data/processed
+tokenizer_dir: data/tokenizer
+
+cleaning:
+  lowercase: false
+  strip_extra_whitespace: true
+
+split:
+  train_ratio: 0.98
+
+tokenizer:
+  type: bpe
+  vocab_size: 8192
+  special_tokens: ["<pad>", "<bos>", "<eos>", "<unk>"]
+
+sequence:
+  max_length: 256
+  stride: 256
