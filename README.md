@@ -35,3 +35,39 @@ python -m scripts.eval --config configs/eval.yaml
 See `docs/repo_blueprint.md` for file-by-file purpose and implementation notes.
 
 A concrete file checklist is in `docs/repo_files_created.md`.
+
+## First working pipeline (Bible PDF)
+
+This repository now includes a first-pass end-to-end implementation that can:
+
+1. Extract text from `data/raw/bible.pdf`.
+2. Clean text and train a BPE tokenizer.
+3. Save train/validation token binaries.
+4. Train a TCN language model and save checkpoints.
+5. Evaluate loss/perplexity and print a sample generation.
+
+Run in order:
+
+```bash
+python -m scripts.prepare_data --config configs/data.yaml
+python -m scripts.train --config configs/train.yaml --model-config configs/model.yaml
+python -m scripts.eval --config configs/eval.yaml --model-config configs/model.yaml
+```
+
+## About embeddings (and BERT option)
+
+Yes—embeddings are essential for this model. The TCN consumes dense vectors, not raw token IDs.
+This repo now supports two embedding modes:
+
+- **Default**: trainable embedding matrix (`nn.Embedding`) sized to your tokenizer vocab.
+- **BERT word embeddings (optional)**: initialize from a pretrained BERT model by setting:
+  - `configs/model.yaml -> model.use_bert_embeddings: true`
+  - `configs/model.yaml -> model.vocab_size: 30522`
+  - `configs/model.yaml -> model.d_model: 768`
+  - `configs/data.yaml -> tokenizer.type: bert`
+
+Quick embedding inspection utility:
+
+```bash
+python -m scripts.bert_embeddings --text "In the beginning God created the heaven and the earth."
+```

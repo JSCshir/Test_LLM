@@ -13,7 +13,10 @@ dependencies = [
   "tokenizers>=0.15",
   "datasets>=2.16",
   "pyyaml>=6.0",
-  "tqdm>=4.66"
+  "tqdm>=4.66",
+  "numpy>=1.26",
+  "pypdf>=4.2",
+  "transformers>=4.40"
 ]
 
 [project.optional-dependencies]
