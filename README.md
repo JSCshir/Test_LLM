@@ -33,3 +33,5 @@ python -m scripts.eval --config configs/eval.yaml
 ## Repository map
 
 See `docs/repo_blueprint.md` for file-by-file purpose and implementation notes.
+
+A concrete file checklist is in `docs/repo_files_created.md`.
