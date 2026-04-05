@@ -1,5 +1,5 @@
 seed: 42
-raw_corpus_path: data/raw/corpus.txt
+raw_corpus_path: data/raw/bible.pdf
 processed_dir: data/processed
 tokenizer_dir: data/tokenizer
 
