@@ -12,6 +12,7 @@ split:
 
 tokenizer:
   type: bpe
+  bert_model_name: bert-base-uncased
   vocab_size: 8192
   special_tokens: ["<pad>", "<bos>", "<eos>", "<unk>"]
 

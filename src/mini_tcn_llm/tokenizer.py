@@ -7,6 +7,10 @@ from tokenizers.models import BPE
 from tokenizers.pre_tokenizers import Whitespace
 from tokenizers.trainers import BpeTrainer
 
+from tokenizers import Tokenizer
+from tokenizers.models import BPE
+from tokenizers.pre_tokenizers import Whitespace
+from tokenizers.trainers import BpeTrainer
 
 def train_tokenizer(corpus_path: str, output_dir: str, vocab_size: int) -> None:
     """Train and save tokenizer artifacts."""
