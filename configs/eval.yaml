@@ -1,5 +1,6 @@
 checkpoint_path: outputs/checkpoints/latest.pt
 val_tokens: data/processed/val_tokens.bin
+tokenizer_dir: data/tokenizer
 batch_size: 32
 metrics: ["loss", "perplexity"]
 generation:
