@@ -1,0 +1,9 @@
+model:
+  vocab_size: 8192
+  d_model: 384
+  num_layers: 8
+  kernel_size: 3
+  dilations: [1, 2, 4, 8, 16, 32, 64, 128]
+  dropout: 0.1
+  tie_weights: true
+  max_length: 256

@@ -1,0 +1,15 @@
+name: Train Smoke
+
+on:
+  workflow_dispatch:
+
+jobs:
+  smoke-train:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -e .
+      - run: echo "Replace with tiny end-to-end smoke training command"
