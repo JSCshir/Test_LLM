@@ -35,14 +35,10 @@ def main(config_path: str = "configs/data.yaml") -> None:
     cleaned_path = processed_dir / "cleaned_corpus.txt"
     cleaned_path.write_text(cleaned, encoding="utf-8")
 
-    tokenizer_cfg = cfg.get("tokenizer", {})
-    tokenizer_type = str(tokenizer_cfg.get("type", "bpe"))
     train_tokenizer(
         corpus_path=str(cleaned_path),
         output_dir=str(tokenizer_dir),
-        vocab_size=int(tokenizer_cfg.get("vocab_size", 8192)),
-        tokenizer_type=tokenizer_type,
-        bert_model_name=str(tokenizer_cfg.get("bert_model_name", "bert-base-uncased")),
+        vocab_size=int(cfg.get("tokenizer", {}).get("vocab_size", 8192)),
     )
 
     tokenizer = load_tokenizer(str(tokenizer_dir))

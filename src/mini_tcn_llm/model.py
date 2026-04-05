@@ -35,6 +35,7 @@ class TCNBlock(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # x: [B, T, C]
         residual = x
         y = x.transpose(1, 2)
         y = self.conv1(y).transpose(1, 2)
@@ -62,27 +63,11 @@ class TCNLanguageModel(nn.Module):
         dilations: list[int],
         dropout: float,
         tie_weights: bool,
-        use_bert_embeddings: bool = False,
-        bert_model_name: str = "bert-base-uncased",
-        freeze_bert_embeddings: bool = True,
     ):
         super().__init__()
-
-        if use_bert_embeddings:
-            self.token_emb = _load_bert_word_embeddings(bert_model_name, freeze_bert_embeddings)
-            emb_dim = self.token_emb.embedding_dim
-            if emb_dim != d_model:
-                raise ValueError(f"d_model ({d_model}) must match BERT embedding dim ({emb_dim})")
-            if vocab_size != self.token_emb.num_embeddings:
-                raise ValueError(
-                    f"vocab_size ({vocab_size}) must match BERT tokenizer vocab ({self.token_emb.num_embeddings})"
-                )
-        else:
-            self.token_emb = nn.Embedding(vocab_size, d_model)
-
+        self.token_emb = nn.Embedding(vocab_size, d_model)
         if len(dilations) < num_layers:
             raise ValueError("dilations length must be >= num_layers")
-
         self.blocks = nn.ModuleList(
             [
                 TCNBlock(channels=d_model, kernel_size=kernel_size, dilation=dilations[i], dropout=dropout)
@@ -105,18 +90,12 @@ class TCNLanguageModel(nn.Module):
         return logits, loss
 
 
-def _load_bert_word_embeddings(model_name: str, freeze: bool) -> nn.Embedding:
-    from transformers import AutoModel
-
-    bert = AutoModel.from_pretrained(model_name)
-    emb = bert.embeddings.word_embeddings
-    emb.weight.requires_grad = not freeze
-    return emb
-
-
 def build_model(config: dict):
     """Construct and return the TCN model."""
-    cfg = config["model"] if "model" in config else config
+    if "model" in config:
+        cfg = config["model"]
+    else:
+        cfg = config
     return TCNLanguageModel(
         vocab_size=int(cfg["vocab_size"]),
         d_model=int(cfg["d_model"]),
@@ -125,7 +104,4 @@ def build_model(config: dict):
         dilations=[int(d) for d in cfg["dilations"]],
         dropout=float(cfg.get("dropout", 0.0)),
         tie_weights=bool(cfg.get("tie_weights", False)),
-        use_bert_embeddings=bool(cfg.get("use_bert_embeddings", False)),
-        bert_model_name=str(cfg.get("bert_model_name", "bert-base-uncased")),
-        freeze_bert_embeddings=bool(cfg.get("freeze_bert_embeddings", True)),
     )

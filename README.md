@@ -53,21 +53,3 @@ python -m scripts.prepare_data --config configs/data.yaml
 python -m scripts.train --config configs/train.yaml --model-config configs/model.yaml
 python -m scripts.eval --config configs/eval.yaml --model-config configs/model.yaml
 ```
-
-## About embeddings (and BERT option)
-
-Yes—embeddings are essential for this model. The TCN consumes dense vectors, not raw token IDs.
-This repo now supports two embedding modes:
-
-- **Default**: trainable embedding matrix (`nn.Embedding`) sized to your tokenizer vocab.
-- **BERT word embeddings (optional)**: initialize from a pretrained BERT model by setting:
-  - `configs/model.yaml -> model.use_bert_embeddings: true`
-  - `configs/model.yaml -> model.vocab_size: 30522`
-  - `configs/model.yaml -> model.d_model: 768`
-  - `configs/data.yaml -> tokenizer.type: bert`
-
-Quick embedding inspection utility:
-
-```bash
-python -m scripts.bert_embeddings --text "In the beginning God created the heaven and the earth."
-```
